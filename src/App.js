@@ -7,11 +7,33 @@ function App() {
 
   const createTile = () => {
     const time = new Date()
-    setTileArr([{ id:uuidv4(), title:'New Title', description:'New Desc', time:time.toLocaleString() },...tileArr])
+    setTileArr([{ id:uuidv4(), title:'', description:'', time:time.toLocaleString() },...tileArr])
   }
 
-  const editTile = () => {
+  const editTitle = (id, title) => {
+    const time = new Date()
 
+    const newState = tileArr.map((tile) => {
+      if (tile.id === id) {
+        return {...tile, title, time:time.toLocaleString() }
+      }
+      return tile
+    })
+
+    setTileArr(newState)
+  }
+
+  const editDesc = (id, description) => {
+    const time = new Date()
+
+    const newState = tileArr.map((tile) => {
+      if (tile.id === id) {
+        return {...tile, description, time:time.toLocaleString() }
+      }
+      return tile
+    })
+
+    setTileArr(newState)
   }
 
   const removeTile = (id) => {
@@ -25,9 +47,9 @@ function App() {
           <div className="tiles">
             {tileArr.map((tile) => (
               <div className="tile" key={tile.id}>
-                <input className="tile-title" onChange={(e) => e.target.value}placeholder="Title"></input>
+                <input className="tile-title" onChange={() => editTitle(tile.id, tile.title)}placeholder="Title" autoFocus></input>
                 <textarea
-                maxLength="140" className="tile-description" placeholder="Description" onChange={(e) => e.target.value}></textarea>
+                maxLength="140" className="tile-description" placeholder="Description" onChange={() => editDesc(tile.id, tile.description)}></textarea>
                 <div className="tile-bottom-cont">
                   <p>{tile.time}</p>
                   <button onClick={() => removeTile(tile.id)}>Remove</button>
