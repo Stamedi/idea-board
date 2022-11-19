@@ -4,16 +4,27 @@
 }
 
 .App {
-  text-align: center;
+  /* text-align: center; */
   max-width: 100vw;
   height: auto;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+/* .flex-container {
+  display: flex;
+  justify-content:center;
+} */
 
 .tiles {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center; 
   margin-top: 100px;
+  width: 100%;
 }
 
 .tile {
@@ -39,5 +50,13 @@
   resize: none;
   outline: none;
   border: none;
+  padding: 0.5em 0.5em;
+}
+
+.tile-bottom-cont {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   padding: 0.5em 0.5em;
 }
