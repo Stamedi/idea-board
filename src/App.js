@@ -17,16 +17,18 @@ function App() {
     <div className="App">
       <h1>IDEA BOARD</h1>
       <button onClick={() => createTile()}>Create New Idea</button>
-        {tileArr.map((tile) => (
-          <div key={tile.id}>
-            <h1>{tile.id}</h1>
-            <input className="title" onChange={(e) => e.target.value}placeholder="Title"></input>
-            <textarea className="description" placeholder="Description" onChange={(e) => e.target.value}></textarea>
-            <div>
-              <p>{tile.time}</p>
+        <div className="tiles">
+          {tileArr.map((tile) => (
+            <div className="tile" key={tile.id}>
+              <input className="tile-title" onChange={(e) => e.target.value}placeholder="Title"></input>
+              <textarea
+              maxlength="140" className="tile-description" placeholder="Description" onChange={(e) => e.target.value}></textarea>
+              <div>
+                <p>{tile.time}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
     </div>
   );
 }
