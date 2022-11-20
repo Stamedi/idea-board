@@ -44,11 +44,41 @@ function App() {
     setTileArr(tileArr.filter((tile) => tile.id !== id ))
   }
 
+  const sortByDate = () => {
+
+    const sortedArrAsc = [...tileArr].sort((a, b) => a.time > b.time ? 1 : -1);
+
+    const sortedArrDesc = [...tileArr].sort((a, b) => a.time > b.time ? -1 : 1);
+
+    if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
+      setTileArr(sortedArrDesc)
+    } else if (JSON.stringify(tileArr) === JSON.stringify(sortedArrDesc)) {
+      setTileArr(sortedArrAsc)
+    } else {
+      setTileArr(sortedArrAsc)
+    }
+  }
+
+  const sortByTitle = () => {
+
+    const sortedArrAsc = [...tileArr].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
+
+    const sortedArrDesc = [...tileArr].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? -1 : 1);
+
+    if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
+      setTileArr(sortedArrDesc)
+    } else if (JSON.stringify(tileArr) === JSON.stringify(sortedArrDesc)) {
+      setTileArr(sortedArrAsc)
+    } else {
+      setTileArr(sortedArrAsc)
+    }
+  }
+
   useEffect(() => {
     if (typeof tileArr !== "string") {
       window.localStorage.setItem('notes', JSON.stringify(tileArr));
     }
-  }, [createTile, editTitle, editDesc, removeTile])
+  }, [createTile, editTitle, editDesc, removeTile, sortByDate, sortByTitle])
   
   useEffect(() => {
     if (window.localStorage.getItem('notes') !== null) {
@@ -62,6 +92,10 @@ function App() {
       <h1 className="header-container"><img src={idea_icon} alt="idea_icon" /> BOARD</h1>
       <div className="header-btn-container">
         <button className="create-btn" onClick={() => createTile()}>Create New Idea</button>
+        <div className="sorting-container">
+        <button onClick={() => sortByDate()}>Sort by Date</button>
+        <button onClick={() => sortByTitle()}>Sort by Title</button>
+        </div>
       </div>
 
       <div className="created-not-cont">{tileCreated === true && <h3>{'Tile has been created!'}</h3>}</div>
