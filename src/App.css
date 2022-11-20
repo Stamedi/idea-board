@@ -8,8 +8,26 @@ body {
   color: #333333;
 }
 
+.App {
+  max-width: 100vw;
+  height: auto;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner-container {
+  width: 75%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+}
+
 .remove-btn,
-.create-btn {
+.create-btn,
+.sorting-container > button {
   border: none;
   background-color: rgb(234, 233, 233);
   background-color: #333333;
@@ -26,7 +44,8 @@ body {
 }
 
 .remove-btn:hover,
-.create-btn:hover {
+.create-btn:hover,
+.sorting-container > button:hover {
   background-color: whitesmoke;
   cursor: pointer;
   color: #333333;
@@ -34,7 +53,8 @@ body {
 }
 
 .remove-btn:active,
-.create-btn:active {
+.create-btn:active,
+.sorting-container > button:active {
   cursor: pointer;
   color: whitesmoke;
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.1);
@@ -48,17 +68,33 @@ body {
   background-color: #638948;
 }
 
-input, textarea {
-  background-color: transparent;
+.sorting-container > button:active {
+  background-color: #ab7821;
 }
 
-.App {
-  max-width: 100vw;
-  height: auto;
-  display:flex;
+.header-btn-container {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.sorting-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.sorting-container > button {
+  margin: 0 0.4em;
+}
+
+input, textarea {
+  background-color: transparent;
 }
 
 

@@ -12,7 +12,7 @@ function App() {
      setTileArr([{ id:uuidv4(), title:'', description:'', descLength:140, time:time.toLocaleString() },...tileArr])
 
      setTileCreated(true)
-     setTimeout(() => setTileCreated(false), 3000)
+     setTimeout(() => setTileCreated(false), 5000)
   }
 
   const editTitle = (id, e) => {
@@ -89,6 +89,7 @@ function App() {
 
   return (
     <div className="App">
+      <div className="inner-container">
       <h1 className="header-container"><img src={idea_icon} alt="idea_icon" /> BOARD</h1>
       <div className="header-btn-container">
         <button className="create-btn" onClick={() => createTile()}>Create New Idea</button>
@@ -116,6 +117,7 @@ function App() {
             </div>
           )))}
         </div>
+      </div>
       </div>
     </div>
   );
