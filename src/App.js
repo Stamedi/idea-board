@@ -78,7 +78,8 @@ function App() {
     if (typeof tileArr !== "string") {
       window.localStorage.setItem('notes', JSON.stringify(tileArr));
     }
-  }, [createTile, editTitle, editDesc, removeTile, sortByDate, sortByTitle])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[createTile, editTitle, editDesc, removeTile, sortByDate, sortByTitle])
   
   useEffect(() => {
     if (window.localStorage.getItem('notes') !== null) {
