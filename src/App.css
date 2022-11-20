@@ -116,7 +116,7 @@ input, textarea {
   display: flex;
 }
 
-.created-not-cont {
+.updated-not-cont {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,12 +125,9 @@ input, textarea {
   margin-top: 3rem;
 }
 
-.created-not-cont > h3 {
+.updated-not-cont > h3 {
   position: absolute; 
   text-align: center; 
-  color: whitesmoke;
-  background-color: #638948;
-  border-radius: 3px;
   padding: 0.3em;
 }
 

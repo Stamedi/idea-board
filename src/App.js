@@ -5,14 +5,11 @@ import './App.css';
 
 function App() {
   const [tileArr, setTileArr] = useState('');
-  const [tileCreated, setTileCreated] = useState(false)
+  const [tileUpdated, setTileUpdated] = useState(false)
 
   const createTile = () => {
     const time = new Date()
      setTileArr([{ id:uuidv4(), title:'', description:'', descLength:140, time:time.toLocaleString() },...tileArr])
-
-     setTileCreated(true)
-     setTimeout(() => setTileCreated(false), 5000)
   }
 
   const editTitle = (id, e) => {
@@ -26,6 +23,11 @@ function App() {
     })
 
     setTileArr(newState)
+
+    if (tileUpdated === false) {
+      setTileUpdated(true)
+      setTimeout(() => setTileUpdated(false), 3000)
+    }
   }
 
   const editDesc = (id, e, length) => {
@@ -38,6 +40,11 @@ function App() {
     })
 
     setTileArr(newState)
+
+    if (tileUpdated === false) {
+      setTileUpdated(true)
+      setTimeout(() => setTileUpdated(false), 3000)
+    }
   }
 
   const removeTile = (id) => {
@@ -100,7 +107,7 @@ function App() {
         </div>
       </div>
 
-      <div className="created-not-cont">{tileCreated === true && <h3>{'Tile has been created!'}</h3>}</div>
+      <div className="updated-not-cont">{tileUpdated === true && <h3>{'Tile has been Updated!'}</h3>}</div>
       <div className="flex-container">
         <div className="tiles">
           {tileArr.length !== 0 && (tileArr.map((tile) => (
