@@ -107,7 +107,7 @@ function App() {
         </div>
       </div>
 
-      <div className="updated-not-cont">{tileUpdated === true && <h3>{'a tile has been updated!'}</h3>}</div>
+      <div className="updated-not-cont">{tileUpdated === true && <h3>{'Tile has been updated!'}</h3>}</div>
       <div className="flex-container">
         <div className="tiles">
           {tileArr.length !== 0 && (tileArr.map((tile) => (
