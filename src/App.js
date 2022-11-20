@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import idea_icon from './idea_icon.png'
 import './App.css';
 
 function App() {
@@ -55,8 +56,8 @@ function App() {
   
   return (
     <div className="App">
-      <h1>IDEA BOARD</h1>
-      <button onClick={() => createTile()}>Create New Idea</button>
+      <h1 className="header-container"><img src={idea_icon} alt="idea_icon" /> BOARD</h1>
+      <button className="create-btn"onClick={() => createTile()}>Create New Idea</button>
         <div className="flex-container">
           <div className="tiles">
             {tileArr.length !== 0 && (tileArr.map((tile) => (
@@ -66,7 +67,7 @@ function App() {
                 maxLength="140" className="tile-description" placeholder="Description" onChange={(e) => editDesc(tile.id, e.target.value)} value={tile.description}></textarea>
                 <div className="tile-bottom-cont">
                   <p>{tile.time}</p>
-                  <button onClick={() => removeTile(tile.id)}>Remove</button>
+                  <button className="remove-btn" onClick={() => removeTile(tile.id)}>Remove</button>
                 </div>
               </div>
             )))}
