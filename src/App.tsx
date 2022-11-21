@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import idea_icon from './idea_icon.png'
 import './App.css';
 
-function App() {
-  const [tileArr, setTileArr] = useState('');
-  const [tileUpdated, setTileUpdated] = useState(false)
+const App:FC = () => {
+  const [tileArr, setTileArr] = useState<string | any[]>('');
+  const [tileUpdated, setTileUpdated] = useState<boolean>(false)
 
   const createTile = () => {
     const time = new Date()
