@@ -1,5 +1,6 @@
 import React, { useEffect, useState, FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+// @ts-ignore
 import idea_icon from './idea_icon.png';
 import './App.css';
 
