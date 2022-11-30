@@ -19,10 +19,11 @@ const App:FC = () => {
 
   const createTile = () => {
     const time = new Date()
-    setTileArr([{ id:uuidv4(), title:'', description:'', time },...tileArr])
+    setTileArr([{ id:uuidv4(), title:'', description:'', time},...tileArr])
   }
 
-  const editTile = (id:string, title:string) => {
+  const editTile = (id:string, title:string, event) => {
+    console.log(event.target)
     if (typeof tileArr === 'object') {
       const time = new Date()
       const newState = tileArr.map((tile) => {
@@ -126,7 +127,7 @@ const App:FC = () => {
         <div className="tiles">
           {typeof tileArr === "object" && (tileArr.map((tile) => (
             <div className="tile slide-in" key={tile.id}>
-              <input onChange={(event) => editTile(tile.id, event.target.value)}type="text" className="tile-title" placeholder="Title" value={tile.title} autoFocus />
+              <input onChange={(event) => editTile(tile.id, event.target.value, event)} type="text" className="tile-title" placeholder="Title" value={tile.title} autoFocus />
               <textarea
               maxLength={140} className="tile-description" placeholder="Description" onChange={(event) => editDesc(tile.id, event.target.value)} value={tile.description}></textarea>
               <div className="desc-length-cont">
