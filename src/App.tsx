@@ -12,54 +12,37 @@ import './App.scss';
 // }
 
 const App:FC = () => {
-  const [tileArr, setTileArr] = useState<string | any[]>('');
+  const [tileArr, setTileArr] = useState<any[] | "undefined">();
   const [tileUpdated, setTileUpdated] = useState<boolean>(false)
 
-
-
+  
   const createTile = () => {
     const time = new Date()
-    setTileArr([{ id:uuidv4(), title:'', description:'', time},...tileArr])
+    setTileArr([{ id:uuidv4(), title:'', description:'', time},...tileArr || []])
   }
 
-  const editTile = (id:string, title:string, event) => {
-    console.log(event.target)
-    if (typeof tileArr === 'object') {
-      const time = new Date()
-      const newState = tileArr.map((tile) => {
-        if (tile.id === id) {
-          return {...tile, title, time}
-        }
-        return tile
-      })
-  
-      setTileArr(newState)
-  
-      if (tileUpdated === false) {
+  const editTile = (id:string, event) => {
+    const time = new Date()
+    const updateNot = () => {
         setTileUpdated(true)
         setTimeout(() => setTileUpdated(false), 3000)
-      }
     }
-
-  }
-
-  const editDesc = (id:string, e:string) => {
     if (typeof tileArr === 'object') {
-      const time = new Date()
-      const newState = tileArr.map((tile: {id:string, }) => {
-        if (tile.id === id) {
-          return {...tile, description:e, time}
-        }
-        return tile
-      })
-  
-      setTileArr(newState)
-  
-      if (tileUpdated === false) {
-        setTileUpdated(true)
-        setTimeout(() => setTileUpdated(false), 3000)
-      }
+        const newState = tileArr.map((tile) => {
+          if (tile.id === id) {
+            if (event.target.name === 'title') {
+              return {...tile, title:event.target.value, time}
+            } else if (event.target.name === 'description') {
+              return {...tile, description:event.target.value, time}
+            }
+          }
+          return tile
+        })
+    
+        setTileArr(newState)
+        updateNot()
     }
+
   }
 
   const removeTile = (id:string) => {
@@ -70,9 +53,9 @@ const App:FC = () => {
 
   const sortByDate = () => {
 
-    const sortedArrAsc = [...tileArr].sort((a, b) => a.time > b.time ? 1 : -1);
+    const sortedArrAsc = [...tileArr || []].sort((a, b) => a.time > b.time ? 1 : -1);
 
-    const sortedArrDesc = [...tileArr].sort((a, b) => a.time > b.time ? -1 : 1);
+    const sortedArrDesc = [...tileArr || []].sort((a, b) => a.time > b.time ? -1 : 1);
 
     if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
       setTileArr(sortedArrDesc)
@@ -84,9 +67,9 @@ const App:FC = () => {
   }
 
   const sortByTitle = () => {
-    const sortedArrAsc = [...tileArr].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
+    const sortedArrAsc = [...tileArr || []].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
 
-    const sortedArrDesc = [...tileArr].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? -1 : 1);
+    const sortedArrDesc = [...tileArr || []].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? -1 : 1);
 
     if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
       setTileArr(sortedArrDesc)
@@ -98,14 +81,14 @@ const App:FC = () => {
   }
 
   useEffect(() => {
-    if (typeof tileArr !== "string") {
+    if (typeof tileArr !== "undefined") {
       window.localStorage.setItem('notes', JSON.stringify(tileArr));
     }
   },[tileArr])
   
   useEffect(() => {
     if (window.localStorage.getItem('notes') !== null) {
-        setTileArr(JSON.parse(window.localStorage.getItem('notes') || ""))
+        setTileArr(JSON.parse(window.localStorage.getItem('notes') || "undefined"))
     } 
 },[])
 
@@ -127,9 +110,9 @@ const App:FC = () => {
         <div className="tiles">
           {typeof tileArr === "object" && (tileArr.map((tile) => (
             <div className="tile slide-in" key={tile.id}>
-              <input onChange={(event) => editTile(tile.id, event.target.value, event)} type="text" className="tile-title" placeholder="Title" value={tile.title} autoFocus />
+              <input onChange={(event) => editTile(tile.id, event)} name="title" type="text" className="tile-title" placeholder="Title" value={tile.title} autoFocus />
               <textarea
-              maxLength={140} className="tile-description" placeholder="Description" onChange={(event) => editDesc(tile.id, event.target.value)} value={tile.description}></textarea>
+              maxLength={140} name="description" className="tile-description" placeholder="Description" onChange={(event) => editTile(tile.id, event)} value={tile.description}></textarea>
               <div className="desc-length-cont">
                 {tile.description.length > 89 && <span>{140 - tile.description.length}</span>}
               </div>
@@ -147,6 +130,3 @@ const App:FC = () => {
 }
 
 export default App;
-
-
-// tileArr.length !== 0
