@@ -2,7 +2,7 @@ import React, { useEffect, useState, FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 // @ts-ignore
 import idea_icon from './idea_icon.png';
-import './App.css';
+import './App.scss';
 
 
 // interface Tile {
@@ -19,15 +19,15 @@ const App:FC = () => {
 
   const createTile = () => {
     const time = new Date()
-    setTileArr([{ id:uuidv4(), title:'', description:'', descLength:140, time:time.toLocaleString() },...tileArr])
+    setTileArr([{ id:uuidv4(), title:'', description:'', time },...tileArr])
   }
 
-  const editTitle = (id:string, e:string) => {
+  const editTile = (id:string, title:string) => {
     if (typeof tileArr === 'object') {
       const time = new Date()
       const newState = tileArr.map((tile) => {
         if (tile.id === id) {
-          return {...tile, title:e, time:time.toLocaleString() }
+          return {...tile, title, time}
         }
         return tile
       })
@@ -42,12 +42,12 @@ const App:FC = () => {
 
   }
 
-  const editDesc = (id:string, e:string, length:number) => {
+  const editDesc = (id:string, e:string) => {
     if (typeof tileArr === 'object') {
       const time = new Date()
       const newState = tileArr.map((tile: {id:string, }) => {
         if (tile.id === id) {
-          return {...tile, description:e, descLength:length-e.length, time:time.toLocaleString() }
+          return {...tile, description:e, time}
         }
         return tile
       })
@@ -100,8 +100,7 @@ const App:FC = () => {
     if (typeof tileArr !== "string") {
       window.localStorage.setItem('notes', JSON.stringify(tileArr));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[createTile, editTitle, editDesc, removeTile, sortByDate, sortByTitle])
+  },[tileArr])
   
   useEffect(() => {
     if (window.localStorage.getItem('notes') !== null) {
@@ -127,14 +126,14 @@ const App:FC = () => {
         <div className="tiles">
           {typeof tileArr === "object" && (tileArr.map((tile) => (
             <div className="tile slide-in" key={tile.id}>
-              <input onChange={(e) => editTitle(tile.id, e.target.value)}type="text" className="tile-title" placeholder="Title" value={tile.title} autoFocus />
+              <input onChange={(event) => editTile(tile.id, event.target.value)}type="text" className="tile-title" placeholder="Title" value={tile.title} autoFocus />
               <textarea
-              maxLength={140} className="tile-description" placeholder="Description" onChange={(e) => editDesc(tile.id, e.target.value, e.target.maxLength)} value={tile.description}></textarea>
+              maxLength={140} className="tile-description" placeholder="Description" onChange={(event) => editDesc(tile.id, event.target.value)} value={tile.description}></textarea>
               <div className="desc-length-cont">
-                {tile.descLength < 51 && <span>{tile.descLength}</span>}
+                {tile.description.length > 89 && <span>{140 - tile.description.length}</span>}
               </div>
               <div className="tile-bottom-cont">
-                <p>{tile.time}</p>
+                <p>{tile.time.toLocaleString()}</p>
                 <button className="remove-btn" onClick={() => removeTile(tile.id)}>Remove</button>
               </div>
             </div>
