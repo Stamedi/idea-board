@@ -2,30 +2,30 @@ import React, { useEffect, useState, FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 // @ts-ignore
 import idea_icon from './idea_icon.png';
+// @ts-ignore
+import asc_icon from './list.png';
+// @ts-ignore
+import desc_icon from './sort.png';
 import './App.scss';
-
-
-// interface Tile {
-//   id: string,
-//   e?: string | number,
-//   length?: string | number,
-// }
 
 const App:FC = () => {
   const [tileArr, setTileArr] = useState<any[] | "undefined">();
   const [tileUpdated, setTileUpdated] = useState<boolean>(false)
+  const [sortTiles, setSortTiles] = useState<{sort: string, sortBy: string} | undefined>()
 
-  
+
   const createTile = () => {
     const time = new Date()
-    setTileArr([{ id:uuidv4(), title:'', description:'', time},...tileArr || []])
+    setTileArr([{ id:uuidv4(), title:'', description:'', time },...tileArr || []])
   }
 
   const editTile = (id:string, event) => {
     const time = new Date()
     const updateNot = () => {
-        setTileUpdated(true)
-        setTimeout(() => setTileUpdated(false), 3000)
+        if (tileUpdated === false) {
+          setTileUpdated(true)
+          setTimeout(() => setTileUpdated(false), 3000)
+        }
     }
     if (typeof tileArr === 'object') {
         const newState = tileArr.map((tile) => {
@@ -52,17 +52,19 @@ const App:FC = () => {
   }
 
   const sortByDate = () => {
-
     const sortedArrAsc = [...tileArr || []].sort((a, b) => a.time > b.time ? 1 : -1);
 
     const sortedArrDesc = [...tileArr || []].sort((a, b) => a.time > b.time ? -1 : 1);
 
     if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
       setTileArr(sortedArrDesc)
+      setSortTiles({sortBy:'date', sort:'desc'})
     } else if (JSON.stringify(tileArr) === JSON.stringify(sortedArrDesc)) {
       setTileArr(sortedArrAsc)
+      setSortTiles({sortBy:'date', sort:'asc'})
     } else {
       setTileArr(sortedArrAsc)
+      setSortTiles({sortBy:'date', sort:'asc'})
     }
   }
 
@@ -73,10 +75,13 @@ const App:FC = () => {
 
     if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
       setTileArr(sortedArrDesc)
+      setSortTiles({sortBy:'title', sort:'desc'})
     } else if (JSON.stringify(tileArr) === JSON.stringify(sortedArrDesc)) {
       setTileArr(sortedArrAsc)
+      setSortTiles({sortBy:'title', sort:'asc'})
     } else {
       setTileArr(sortedArrAsc)
+      setSortTiles({sortBy:'title', sort:'asc'})
     }
   }
 
@@ -101,10 +106,10 @@ const App:FC = () => {
         <button className="create-btn" onClick={() => createTile()}>Create New Idea</button>
         <div className="sorting-container">
         <button onClick={() => sortByDate()}>Sort by Date</button>
+        {sortTiles !== undefined && (sortTiles.sortBy === 'title' && sortTiles.sort === 'asc' ? <img src={asc_icon} alt="" /> : sortTiles.sortBy === 'title' && sortTiles.sort === 'desc' ? <img src={desc_icon} alt="" /> : '')}
         <button onClick={() => sortByTitle()}>Sort by Title</button>
         </div>
       </div>
-
       <div className="updated-not-cont">{tileUpdated === true && <h3>{'Tile has been updated!'}</h3>}</div>
       <div className="flex-container">
         <div className="tiles">
