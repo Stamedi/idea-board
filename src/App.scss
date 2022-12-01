@@ -98,9 +98,26 @@ body {
   margin-top: 1rem;
   width: 100%;
   justify-content: center;
+  // align-items: center;
 
   button {
     margin: 0 0.4em;
+  }
+}
+
+.sorting-icon-cont {
+  position: relative;
+  width: 1.5rem;
+  margin-top: 0.5rem;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    display: flex;
   }
 }
 
