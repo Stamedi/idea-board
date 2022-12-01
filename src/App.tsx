@@ -11,12 +11,12 @@ import './App.scss';
 const App:FC = () => {
   const [tileArr, setTileArr] = useState<any[] | "undefined">();
   const [tileUpdated, setTileUpdated] = useState<boolean>(false)
-  const [sortTiles, setSortTiles] = useState<{sort: string, sortBy: string} | undefined>()
+  const [sortTiles, setSortTiles] = useState<{sort: string, sortBy: string} | undefined >()
 
 
   const createTile = () => {
     const time = new Date()
-    setTileArr([{ id:uuidv4(), title:'', description:'', time },...tileArr || []])
+    setTileArr([{ id:uuidv4(), title:'', description:'', time:time.toLocaleString() },...tileArr || []])
   }
 
   const editTile = (id:string, event) => {
@@ -51,50 +51,64 @@ const App:FC = () => {
     }
   }
 
-  const sortByDate = () => {
-    const sortedArrAsc = [...tileArr || []].sort((a, b) => a.time > b.time ? 1 : -1);
+  const sortBy = (event) => {
+    const sortName = event.target.name
+    const dateAsc = [...tileArr || []].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
+    const dateDesc = [...tileArr || []].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? -1 : 1);
+    const titleAsc = [...tileArr || []].sort((a, b) => a.time > b.time ? 1 : -1)
+    const titleDesc = [...tileArr || []].sort((a, b) => a.time > b.time ? -1 : 1)
 
-    const sortedArrDesc = [...tileArr || []].sort((a, b) => a.time > b.time ? -1 : 1);
-
-    if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
-      setTileArr(sortedArrDesc)
-      setSortTiles({sortBy:'date', sort:'desc'})
-    } else if (JSON.stringify(tileArr) === JSON.stringify(sortedArrDesc)) {
-      setTileArr(sortedArrAsc)
-      setSortTiles({sortBy:'date', sort:'asc'})
+    if (sortTiles) {
+      if (sortTiles.sort === 'asc') {
+        setSortTiles({sortBy:sortName, sort:'desc'})
+      } else if (sortTiles.sort === 'desc') {
+        setSortTiles({sortBy:sortName, sort:'asc'})
+      } 
     } else {
-      setTileArr(sortedArrAsc)
-      setSortTiles({sortBy:'date', sort:'asc'})
+      setSortTiles({sortBy:sortName, sort:'asc'})
     }
+    
+   if (sortTiles) {
+    const sortedArr = 
+    sortName === 'title' ? 
+      (
+        sortTiles.sort === 'desc' ?
+          (titleAsc) 
+        : sortTiles.sort === 'asc' ?
+          (titleDesc) 
+        : (titleAsc)
+      )
+    : sortName === 'date' ?
+      (
+        sortTiles.sort === 'desc' ? 
+          (dateAsc) 
+      : sortTiles.sort === 'asc' ?
+          (dateDesc) 
+        : (dateAsc)
+      ) 
+    : [];
+
+    setTileArr(sortedArr)
+   }
   }
 
-  const sortByTitle = () => {
-    const sortedArrAsc = [...tileArr || []].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
-
-    const sortedArrDesc = [...tileArr || []].sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? -1 : 1);
-
-    if (JSON.stringify(tileArr) === JSON.stringify(sortedArrAsc)) {
-      setTileArr(sortedArrDesc)
-      setSortTiles({sortBy:'title', sort:'desc'})
-    } else if (JSON.stringify(tileArr) === JSON.stringify(sortedArrDesc)) {
-      setTileArr(sortedArrAsc)
-      setSortTiles({sortBy:'title', sort:'asc'})
-    } else {
-      setTileArr(sortedArrAsc)
-      setSortTiles({sortBy:'title', sort:'asc'})
-    }
-  }
+  // const sortByIcon = () => {
+  //   sortTiles && (sortTiles.sortBy === 'title' && sortTiles.sort === 'asc' ? <img src={asc_icon} alt="" /> : sortTiles.sortBy === 'title' && sortTiles.sort === 'desc' ? <img src={desc_icon} alt="" /> : '')
+  // }
 
   useEffect(() => {
-    if (typeof tileArr !== "undefined") {
-      window.localStorage.setItem('notes', JSON.stringify(tileArr));
-    }
+    tileArr && window.localStorage.setItem('notes', JSON.stringify(tileArr))
   },[tileArr])
   
   useEffect(() => {
-    if (window.localStorage.getItem('notes') !== null) {
-        setTileArr(JSON.parse(window.localStorage.getItem('notes') || "undefined"))
-    } 
+    const notes = window.localStorage.getItem('notes')
+    const parsed = notes ? JSON.parse(notes) : null
+    if (parsed) {
+        setTileArr(parsed)
+    }
+    // if ( !== null) {
+    //     setTileArr(JSON.parse(window.localStorage.getItem('notes') || "undefined"))
+    // } 
 },[])
 
 
@@ -105,9 +119,9 @@ const App:FC = () => {
       <div className="header-btn-container">
         <button className="create-btn" onClick={() => createTile()}>Create New Idea</button>
         <div className="sorting-container">
-        <button onClick={() => sortByDate()}>Sort by Date</button>
-        {sortTiles !== undefined && (sortTiles.sortBy === 'title' && sortTiles.sort === 'asc' ? <img src={asc_icon} alt="" /> : sortTiles.sortBy === 'title' && sortTiles.sort === 'desc' ? <img src={desc_icon} alt="" /> : '')}
-        <button onClick={() => sortByTitle()}>Sort by Title</button>
+        <button name="date" onClick={(event) => sortBy(event)}>Sort by Date</button>
+        <button name="title" onClick={(event) => sortBy(event)}>Sort by Title</button>
+        {sortTiles && (sortTiles.sortBy === 'title' && sortTiles.sort === 'asc' ? <img src={asc_icon} alt="" /> : sortTiles.sortBy === 'title' && sortTiles.sort === 'desc' ? <img src={desc_icon} alt="" /> : '')}
         </div>
       </div>
       <div className="updated-not-cont">{tileUpdated === true && <h3>{'Tile has been updated!'}</h3>}</div>
@@ -123,6 +137,9 @@ const App:FC = () => {
               </div>
               <div className="tile-bottom-cont">
                 <p>{tile.time.toLocaleString()}</p>
+                {/* {console.log(typeof tile.time)}
+                {console.log(tile.time)}
+                {console.log(tile.time.toLocaleString())} */}
                 <button className="remove-btn" onClick={() => removeTile(tile.id)}>Remove</button>
               </div>
             </div>
